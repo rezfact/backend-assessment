@@ -15,6 +15,12 @@ const sequelize = new Sequelize({
   username: process.env.APP_DB_USER,
   password: process.env.APP_DB_PASS,
   database: process.env.APP_DB_NAME,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
 });
 
 try {

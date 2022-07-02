@@ -1,0 +1,247 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "article - backend assessment",
+        "description": "Documentation",
+        "version": "1.0.0",
+        "contact": {
+            "name": "rezza fadillah",
+            "email": "rez.fadillah@gmail.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3301/api",
+            "description": "Local development"
+        }
+    ],
+   "components": {
+       "schemas": {
+           "Login": {
+               "type": "object",
+               "required": ["email", "password"],
+               "properties": {
+                   "email":{
+                       "type": "string"                       
+                   },
+                   "password": {
+                       "type": "string"
+                   }
+               },
+               "example": {
+                   "email": "test@gmail.com",
+                   "password": "password"
+               }
+           },
+           "Registration": {
+               "type": "object",
+               "required": ["name", "email", "password", "phone"],
+               "properties": {
+                   "name": {"type": "string"},
+                   "email": {"type": "string"},
+                   "password": {"type": "string"},
+                   "phone": {"type": "string"}
+                },
+                "example": {
+                   "name" : "user test",
+                    "email" : "usertest@gmail.com",
+                    "password" : "password",
+                    "phone" : "081311111111"
+               }
+           },
+           "Category": {
+               "type": "object",
+               "required": ["title"],
+               "properties": {
+                   "title": {"type": "string"}
+               },
+               "example": {
+                   "title": "Tech"
+               }
+           },
+           "Article": {
+               "type": "object",
+               "required": ["title", "short_description", "description", "category_id", "user_id", "image"],
+               "properties": {
+                   "title": {"type": "string"},
+                   "short_description": {"type": "string"},
+                   "description": {"type": "string"},
+                   "categoryid": {"type": "integer"},
+                   "userid": {"type": "integer"},
+                   "image": {"type": "string"}
+               }
+           },
+           "Articles": {
+               "type": "object",
+               "required": ["search", "size", "page"],
+               "properties": {
+                   "search": {"type": "string"},
+                   "size": {"type": "integer"},
+                   "page": {"type": "integer"}
+               }
+           }
+       },
+       "securitySchemes": {
+           "bearerAuth": {
+               "type": "http",
+               "scheme": "bearer",
+               "bearerFormat": "JWT"
+           }
+       }
+    },
+    "tags": [
+        {"name": "Auth"},
+        {"name": "Category"},
+        {"name": "Article"}
+    ],
+    "paths": {
+        "api/auth/login": {
+            "post": {
+                "summary": "Login user",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {                    
+                    "200": { "description": "Success Login" },
+                    "401": { "description": "Password not match!" }
+                }
+            }
+        },
+        "api/auth/register": {
+            "post": {
+                "summary": "User Registration",
+                "tags": ["Auth"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registration"
+                            }
+                        }
+                    }
+                },
+                "responses": {                    
+                    "200": { "description": "Register Success" },
+                    "400": { "description": "Enter a valid email address" }
+                }
+            }
+        },
+        "api/categories": {
+            "get": {
+                "summary": "List data Category",
+                "tags": ["Category"],
+                "responses": {
+                    "200": {"description": "Date Found"}
+                }
+            }
+        },
+        "api/category/{:categoryid}": {
+            "get": {
+                "summary": "Detail Category",
+                "tags": ["Category"],
+                "parameters": [{"in": "path", "name": "id", "required": true, "schema":{"type": "string"}}],
+                "responses": {
+                    "200": {"description": "Data Found"},
+                    "404": {"description": "Data Not Found"}
+                }
+            }
+        },
+        "api/category":{
+            "post": {
+                "summary": "Create Category",
+                "tags": ["Category"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Category"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {"description": "Success create Category"},
+                    "403": {"description": "Token Error"}
+                }
+            }
+        },
+        "api/articles": {
+            "get": {
+                "summary": "List Article",
+                "tags": ["Article"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Articles"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {"description": "Data Found"}
+                }
+            }
+        },
+        "api/article/{:articleId}": {
+            "get": {
+                "summary": "List Article",
+                "tags": ["Article"],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Articles"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {"description": "Data Found"}
+                }
+            }
+        },
+        "api/article": {
+            "post": {
+                "summary": "Create Article",
+                "tags": ["Article"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {"type": "string"},
+                                    "short_description": {"type": "string"},
+                                    "description": {"type": "string"},
+                                    "categoryid": {"type": "integer"},
+                                    "userid": {"type": "integer"},
+                                    "image": {"type": "string"}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {"description": "Success Create Article"},
+                    "403": {"description": "Token Error"}
+                }
+            }
+        }
+    }
+}
