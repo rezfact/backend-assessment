@@ -1,0 +1,27 @@
+{
+  "name": "backend-assessment",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": "git@github.com:rezfact/backend-assessment.git",
+  "author": "rez.fadillah@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "start": "node www",
+    "dev": "npx nodemon www"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.3",
+    "sequelize": "^6.21.2",
+    "sequelize-cli": "^6.4.1",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.4.0"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.12"
+  }
+}
