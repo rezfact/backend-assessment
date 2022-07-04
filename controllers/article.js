@@ -4,10 +4,30 @@ const Op = Sequelize.Op;
 
 class ArticleController {
   static async getArticles(req, res, next) {
-		let limit =  req.body.size != 0 ? req.body.size : 10
-		let offset =  req.body.page
-		let search =  req.body.search != '' ? req.body.search : ''
+		let limit
+		let offset
+		let search
 
+		if (req.body.size === undefined || req.body.size === null || req.body.size === 0) {
+			limit = 10
+		} else { limit = req.body.size }
+
+		if (req.body.page === undefined || req.body.page === null) {
+			offset = 0
+		} else { offset = req.body.page }
+
+		if (req.body.search === undefined || req.body.search === null) {
+			search = ''
+		} else { search = req.body.search }
+
+		console.log({
+			limit,
+			limit1: req.body.size,
+			offset,
+			offset1: req.body.page,
+			search,
+			search1:req.body.search,
+		})
 		const getCount = await Article.count({where: {title: {
 			[Op.like]: `%${search}%`
 		  }}})
